@@ -1,0 +1,54 @@
+version: '3'
+
+name: "Docker-handler-MicroServices"
+
+services:
+  nats-server:
+    image: nats:latest
+    ports:
+      - "8222:8222"
+
+  client-gateway:
+    build: ./../client-gateway
+    ports:
+      - ${CLIENT_GATEWAY_PORT}:3000
+    volumes:
+      - ./../client-gateway/src:/usr/src/app/src
+    command: npm run dev
+    environment:
+      - PORT=3000
+      - NATS_SERVERS=nats://nats-server:4222
+  
+  products-ms:
+    build: ./../products-ms
+    volumes:
+      - ./../products-ms/src:/usr/src/app/src
+    command: npm run dev
+    environment:
+      - PORT=${PRODUCTS_MS_PORT}
+      - DATABASE_URL=${PRODUCTS_MS_DATABASE_URL}
+      - NATS_SERVERS=nats://nats-server:4222
+  
+  orders-db:
+    container_name: orders_databases
+    image: postgres:16.2
+    volumes:
+      - ./../orders-ms/postgres:/var/lib/postgresql/data
+    ports:
+      - ${ORDERS_DB_POSTGRES_PORT}:5432
+    environment:
+      - POSTGRES_USER=${ORDERS_DB_POSTGRES_USER}
+      - POSTGRES_PASSWORD=${ORDERS_DB_POSTGRES_PASSWORD}
+      - POSTGRES_DB=${ORDERS_DB_POSTGRES_DB}
+  
+  orders-ms:
+    depends_on:
+      - orders-db
+    build: ./../orders-ms
+    volumes:
+      - ./../orders-ms/src:/usr/src/app/src
+    command: npm run dev
+    environment:
+      - PORT=${ORDERS_MS_PORT}
+      - DATABASE_URL=${ORDERS_MS_DATABASE_URL}
+      - NATS_SERVERS=nats://nats-server:4222
