@@ -32,8 +32,13 @@ ORDERS_MS_DATABASE_URL      = **********
 docker compose up --build
 ```
 
-!!! Tip
-      If do you need remove previous container you can execute
-      ```
-      docker compose down -v
-      ```
+>[!TIP]
+> If do you need remove previous container you can execute
+>  ```
+>  docker compose down -v
+>  ```
+      
+      
+      
+      
+      
