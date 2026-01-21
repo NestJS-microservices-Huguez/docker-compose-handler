@@ -25,6 +25,12 @@ ORDERS_DB_POSTGRES_DB       = **********
 
 ORDERS_MS_PORT              = **********
 ORDERS_MS_DATABASE_URL      = **********
+
+PAYMENTS_MS_PORT            = **********
+STRIPE_SECRET_KEY           = **********
+SUCCESS_URL                 = **********
+CANCELLED_URL               = **********
+ENDPOINT_SECRET             = **********
 ```
 
 3.- Execute command 

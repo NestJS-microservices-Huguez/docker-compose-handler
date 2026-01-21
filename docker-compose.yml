@@ -1,6 +1,6 @@
 version: '3'
 
-name: "Docker-handler-MicroServices"
+name: "Docker-Handler-MicroServices"
 
 services:
   nats-server:
@@ -51,4 +51,20 @@ services:
     environment:
       - PORT=${ORDERS_MS_PORT}
       - DATABASE_URL=${ORDERS_MS_DATABASE_URL}
+      - NATS_SERVERS=nats://nats-server:4222
+
+  payments-ms:
+    build: ./../payments-ms
+    ports:
+      - ${PAYMENTS_MS_PORT}:${PAYMENTS_MS_PORT}
+    volumes:
+      - ./../payments-ms/src:/usr/src/app/src
+    command: npm run dev
+    environment:
+      - PORT=${PAYMENTS_MS_PORT}
+      - ENDPOINT_SECRET=${ENDPOINT_SECRET}
+      - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}
+      - SUCCESS_URL=${SUCCESS_URL}
+      - CANCELLED_URL=${CANCELLED_URL}
+      - ENDPOINT_SECRET=${ENDPOINT_SECRET}
       - NATS_SERVERS=nats://nats-server:4222
