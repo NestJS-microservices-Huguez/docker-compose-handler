@@ -31,6 +31,11 @@ STRIPE_SECRET_KEY           = **********
 SUCCESS_URL                 = **********
 CANCELLED_URL               = **********
 ENDPOINT_SECRET             = **********
+
+AUTH_PORT                   = **********
+AUTH_MONGODB_PORT           = **********
+AUTH_DATABASE_URL           = **********
+AUTH_SECRET_KEY             = **********
 ```
 
 3.- Execute command 

@@ -68,3 +68,29 @@ services:
       - CANCELLED_URL=${CANCELLED_URL}
       - ENDPOINT_SECRET=${ENDPOINT_SECRET}
       - NATS_SERVERS=nats://nats-server:4222
+
+  auth-db:
+    image: mongo:7
+    container_name: auth_mongodb
+    ports:
+      - "${AUTH_MONGODB_PORT}:27017"
+    command: ["mongod", "--replSet", "rs0", "--bind_ip_all"]
+    volumes:
+      - auth_mongo_data:/data/db
+      - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+    
+  auth-ms:
+    build: ./../auth-ms
+    depends_on:
+      - auth-db
+    volumes:
+      - ./../auth-ms/src:/usr/src/app/src
+    command: npm run dev
+    environment:
+      - PORT=${AUTH_PORT}
+      - NATS_SERVERS=nats://nats-server:4222
+      - DATABASE_URL=mongodb://auth-db:27017/users?replicaSet=rs0
+      - SECRET_KEY=${AUTH_SECRET_KEY}
+
+volumes:
+  auth_mongo_data:
