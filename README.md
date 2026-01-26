@@ -49,7 +49,10 @@ docker compose up --build
 >  docker compose down -v
 >  ```
       
-      
-      
-      
-      
+<br/>
+
+## Production
+&nbsp;&nbsp; Execute command
+```bash
+$ docker compose -f docker-compose.prod.yml build
+```
